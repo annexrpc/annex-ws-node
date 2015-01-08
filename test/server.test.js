@@ -3,22 +3,13 @@
  */
 
 var http = require('http');
-var Server = require('..');
+var annex = require('..');
 
 var server = module.exports = http.createServer();
 
-var msgpack = require('msgpack');
+var marshal = require('annex-marshal-msgpack-node');
 
-var marshal = {
-  encode: function(arg) {
-    return msgpack.pack(arg);
-  },
-  decode: function(bin) {
-    return msgpack.unpack(bin);
-  }
-};
-
-var wss = new Server({server: server, marshal: marshal});
+var wss = new annex.Server({server: server, marshal: marshal});
 
 wss.listen(function(req, res) {
   if (req.module === 'math' && req.method === 'random') return res.send(Math.random());
