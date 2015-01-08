@@ -1,0 +1,28 @@
+{
+  "name": "annex-ws-node",
+  "version": "0.1.0",
+  "description": "node.js annex websocket server",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/annexrpc/annex-ws-node.git"
+  },
+  "keywords": [
+    "rpc"
+  ],
+  "author": "Cameron Bytheway <bytheway.cameron@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/annexrpc/annex-ws-node/issues"
+  },
+  "homepage": "https://github.com/annexrpc/annex-ws-node",
+  "dependencies": {
+    "ws": "^0.6.5"
+  },
+  "devDependencies": {
+    "msgpack": "^0.2.4"
+  }
+}
