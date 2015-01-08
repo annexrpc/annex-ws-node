@@ -15,6 +15,7 @@ module.exports = Server;
 
 function Server (opts) {
   if (!(this instanceof Server)) return new Server(opts);
+  Emitter.call(this);
   opts = opts || {};
   this.marshal = opts.marshal;
   if (!this.marshal) throw new Error('missing marshal');
@@ -49,6 +50,7 @@ Server.prototype.listen = function(fn) {
 
 function IncomingMessage (ws, type, id, mod, fun, params) {
   if (!(this instanceof IncomingMessage)) return new IncomingMessage(ws, type, id, mod, fun, params);
+  Emitter.call(this);
   this.ws = ws;
   this.type = TYPES[id] || 'unknown';
   this.id = id;
@@ -62,19 +64,22 @@ function IncomingMessage (ws, type, id, mod, fun, params) {
 inherits(IncomingMessage, Emitter);
 
 function OutgoingMessage (id, ws) {
+  Emitter.call(this);
   this.id = id;
   this.ws = ws;
 }
 inherits(OutgoingMessage, Emitter);
 
 OutgoingMessage.prototype.send = function(answer) {
-  this._send(this._marshal.encode([0, this.id, answer]));
+  this._send(this._marshal.encode('response', this.id, answer));
   this.statusCode = 200;
+  this._sent = true;
 };
 
 OutgoingMessage.prototype.error = function(error) {
-  this._send(this._marshal.encode([1, this.id, error]));
+  this._send(this._marshal.encode('error', this.id, error));
   this.statusCode = 500;
+  this._sent = true;
 };
 
 OutgoingMessage.prototype._send = function(bin) {
