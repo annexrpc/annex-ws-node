@@ -5,18 +5,10 @@
 var annex = require('..');
 var marshal = require('annex-marshal-msgpack-node');
 
-var client = annex.Client('wss://durga-service.herokuapp.com/register', {marshal: marshal});
+var client = module.exports = annex.Client('wss://poe-math-service.herokuapp.com', {marshal: marshal});
 
-var service = ['prod', 'http://example.com', 0, 'users', 'list', [], 'binary'];
-
-function reg() {
-  client.call('services', 'register', service, function(err, res) {
-    setTimeout(function() {
-      client.call('services', 'unregister', service, function(err, res) {
-        setTimeout(reg, 1000);
-      });
-    }, 1000);
+client.add = function() {
+  client.call('math', 'add', Array.prototype.slice.call(arguments), function(err, res) {
+    console.log(res);
   });
-}
-
-reg();
+};
