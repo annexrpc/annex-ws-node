@@ -33,7 +33,7 @@ function Client(url, opts) {
 
 Client.prototype.call = function(mod, fun, args, cb) {
   var id = this._id++;
-  var req = this.marshal.encode('call', id, mod, fun, args);
+  var req = this.marshal.call(id, [mod, fun], args);
 
   if (this.ws.readyState !== Websocket.OPEN) this.pending.push(req);
   else this.ws.send(req);

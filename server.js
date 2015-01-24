@@ -27,7 +27,7 @@ inherits(Server, Emitter);
 Server.prototype._handle = function(bin, ws) {
   if (!(bin instanceof Buffer)) bin = new Buffer(bin);
   var message = this.marshal.decode(bin);
-  if (!Array.isArray(message)) return ws.send(this.marshal.encode([1, 'invalid message']));
+  if (!Array.isArray(message)) return ws.send(this.marshal.error([0, 0, 'invalid message']));
   message.unshift(ws);
   var req = IncomingMessage.apply(null, message);
   var res = req.res;
@@ -48,14 +48,14 @@ Server.prototype.listen = function(fn) {
   });
 };
 
-function IncomingMessage (ws, type, id, mod, fun, params) {
-  if (!(this instanceof IncomingMessage)) return new IncomingMessage(ws, type, id, mod, fun, params);
+function IncomingMessage (ws, type, id, method, params) {
+  if (!(this instanceof IncomingMessage)) return new IncomingMessage(ws, type, id, method, params);
   Emitter.call(this);
   this.ws = ws;
   this.type = TYPES[id] || 'unknown';
   this.id = id;
-  this.url = mod = this.module = mod;
-  this.method = fun;
+  this.url = this.module = method[0];
+  this.method = method[1];
   this.headers = this.params = params;
   this.res = new OutgoingMessage(id, ws);
   this.res.req = this;
@@ -71,13 +71,13 @@ function OutgoingMessage (id, ws) {
 inherits(OutgoingMessage, Emitter);
 
 OutgoingMessage.prototype.send = function(answer) {
-  this._send(this._marshal.encode('response', this.id, answer));
+  this._send(this._marshal.response(this.id, answer));
   this.statusCode = 200;
   this._sent = true;
 };
 
-OutgoingMessage.prototype.error = function(error) {
-  this._send(this._marshal.encode('error', this.id, error));
+OutgoingMessage.prototype.error = function(error, code) {
+  this._send(this._marshal.error(this.id, code || 1, error));
   this.statusCode = 500;
   this._sent = true;
 };
