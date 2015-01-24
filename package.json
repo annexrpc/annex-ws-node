@@ -1,6 +1,6 @@
 {
   "name": "annex-ws-node",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "node.js annex websocket server",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,6 @@
     "ws": "^0.6.5"
   },
   "devDependencies": {
-    "annex-marshal-msgpack-node": "^0.1.0"
+    "annex-marshal-msgpack-node": "^0.2.0"
   }
 }
