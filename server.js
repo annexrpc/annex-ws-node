@@ -48,7 +48,7 @@ Server.prototype.listen = function(fn) {
   });
 };
 
-function IncomingMessage (ws, type, id, method, params) {
+function IncomingMessage (ws, type, id, method, params, meta) {
   if (!(this instanceof IncomingMessage)) return new IncomingMessage(ws, type, id, method, params);
   Emitter.call(this);
   this.ws = ws;
@@ -56,7 +56,8 @@ function IncomingMessage (ws, type, id, method, params) {
   this.id = id;
   this.url = this.module = method[0];
   this.method = method[1];
-  this.headers = this.params = params;
+  this.params = params;
+  this.headers = meta || {};
   this.res = new OutgoingMessage(id, ws);
   this.res.req = this;
   this.ip = ws.upgradeReq.connection.remoteAddress;

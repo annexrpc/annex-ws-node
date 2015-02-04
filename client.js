@@ -64,6 +64,13 @@ Client.prototype._setupws = function() {
     });
   });
 
+  ws.on('error', function(err) {
+    setTimeout(function() {
+      ws.terminate();
+      self._setupws();
+    }, 1000);
+  });
+
   ws.on('close', function() {
     ws.terminate();
     self._setupws();
