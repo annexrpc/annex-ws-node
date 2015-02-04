@@ -1,6 +1,6 @@
 {
   "name": "annex-ws-node",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "node.js annex websocket server",
   "main": "index.js",
   "scripts": {
